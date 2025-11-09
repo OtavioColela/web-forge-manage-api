@@ -24,12 +24,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static webforge.row_manage_api.enums.StatusPedido.APROVADO;
 import static webforge.row_manage_api.enums.StatusPedido.PENDENTE;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -109,5 +109,32 @@ public class RequisicaoTest {
         assertThrows(ObjectNotFoundException.class, () ->{
             requisicaoService.listarRequisicoes();
         });
+    }
+    @Test
+    public void mustAtualizeRequisitionStatus(){
+        given(requisicaoRepository.findById(requisicaoEntity.getId())).willReturn(Optional.ofNullable(requisicaoEntity));
+        var statusPedido = APROVADO;
+        requisicaoService.definirRequisicao(requisicaoEntity.getId(), statusPedido);
+        assertEquals(APROVADO, requisicaoEntity.getStatusPedido());
+        verify(requisicaoRepository, times(1)).save(requisicaoEntity);
+    }
+
+    @Test
+    public void mustFindAllRequisitionsByUser(){
+        given(requisicaoRepository.findBySolicitanteIdOrderByDataRequisicaoDesc(userEntity.getId())).willReturn(List.of(requisicaoEntity));
+        var result = requisicaoService.getAllRequisitionsByUser(userEntity.getId());
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(requisicaoRepository, times(1)).findBySolicitanteIdOrderByDataRequisicaoDesc(userEntity.getId());
+
+    }
+    @Test
+    public void mustNotFindAllRequisitionsByUser(){
+        given(requisicaoRepository.findBySolicitanteIdOrderByDataRequisicaoDesc(userEntity.getId())).willReturn(List.of());
+        assertThrows(ObjectNotFoundException.class, () ->{
+            requisicaoService.getAllRequisitionsByUser(userEntity.getId());
+        });
+
     }
 }
