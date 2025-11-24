@@ -10,8 +10,7 @@ import webforge.row_manage_api.service.UserService;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/usuario")
@@ -30,6 +29,11 @@ public class UserController {
     @GetMapping("/mostrar")
     public ResponseEntity<List<UserResponse>> getAllUsers(){
         return ResponseEntity.status(FOUND).body(userService.getAllUsers());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest){
+        return ResponseEntity.status(OK).body(userService.updateUser(id, userRequest));
     }
 
 }

@@ -14,12 +14,14 @@ import lombok.*;
 @Builder
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String email;
     private String name;
     private String school;
     private String cpf;
     private String password;
+    private String role;
 
 
 }
