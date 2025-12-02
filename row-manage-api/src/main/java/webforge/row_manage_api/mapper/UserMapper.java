@@ -10,13 +10,16 @@ public class UserMapper {
         return UserEntity.builder()
                 .cpf(userRequest.getCpf())
                 .name(userRequest.getName())
+                .email(userRequest.getEmail())
                 .password(userRequest.getPassword())
                 .school(userRequest.getSchool()).build();
     }
 
     public static UserResponse toResponse(UserEntity userEntity){
         return UserResponse.builder()
+                .id(userEntity.getId())
                 .name(userEntity.getName())
+                .email(userEntity.getEmail())
                 .school(userEntity.getSchool()).build();
     }
 

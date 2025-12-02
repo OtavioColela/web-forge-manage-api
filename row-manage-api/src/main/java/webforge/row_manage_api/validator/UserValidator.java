@@ -23,6 +23,16 @@ public class UserValidator {
         if(userRequest.getPassword().isBlank()){
             throw new BadRequestException("Digite uma senha");
         }
+        if(userRequest.getEmail().isBlank()){
+            throw new BadRequestException("Digite um email");
+        }
+        if(!(userRequest.getEmail().endsWith("@gmail.com")
+                || userRequest.getEmail().endsWith("@yahoo.com")
+                || userRequest.getEmail().endsWith("@outlook.com")
+                || userRequest.getEmail().endsWith("@hotmail.com"))){
+
+            throw new BadRequestException("Digite um email válido");
+        }
     }
 
 }
