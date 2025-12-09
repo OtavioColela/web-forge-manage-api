@@ -8,9 +8,11 @@ public class UserMapper {
 
     public static UserEntity toEntity(UserRequest userRequest){
         return UserEntity.builder()
+                .id(userRequest.getId())
                 .cpf(userRequest.getCpf())
                 .name(userRequest.getName())
                 .email(userRequest.getEmail())
+                .role(userRequest.getRole())
                 .password(userRequest.getPassword())
                 .school(userRequest.getSchool()).build();
     }
@@ -23,11 +25,5 @@ public class UserMapper {
                 .school(userEntity.getSchool()).build();
     }
 
-    public static UserEntity responseIntoEntity(UserResponse userResponse) {
-        return UserEntity.builder()
-                .name(userResponse.getName())
-                .school(userResponse.getSchool()).build();
-
-    }
 }
 

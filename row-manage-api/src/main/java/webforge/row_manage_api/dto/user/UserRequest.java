@@ -13,6 +13,7 @@ public class UserRequest {
     private String email;
     private String school;
     private String cpf;
+    private String role;
     private String password;
 
 }
