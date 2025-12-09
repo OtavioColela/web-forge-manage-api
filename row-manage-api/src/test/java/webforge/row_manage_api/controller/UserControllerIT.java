@@ -1,6 +1,6 @@
 package webforge.row_manage_api.controller;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 import webforge.row_manage_api.config.IntegrationTest;
 
 import static org.hamcrest.Matchers.is;

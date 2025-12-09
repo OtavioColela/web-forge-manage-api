@@ -38,6 +38,8 @@ public class    SecurityConfigurations {
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/usuario").permitAll()
+                            .requestMatchers("/estoque/**").permitAll()
+                            .requestMatchers("/requisicao/**").permitAll()
                             .requestMatchers( "api/auth/login").permitAll()
                             .requestMatchers("api/auth/**").permitAll()
                             .requestMatchers("api/usuario/deletar/**").hasAnyAuthority("SUPER_USER","ADMIN")

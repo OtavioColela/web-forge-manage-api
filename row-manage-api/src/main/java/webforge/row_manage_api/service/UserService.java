@@ -25,9 +25,8 @@ public class UserService {
     public UserResponse createUser(UserRequest userRequest){
         validateUser(userRequest);
         var user = UserMapper.toEntity(userRequest);
-        var userResponse = UserMapper.toResponse(user);
         userRepository.saveAndFlush(user);
-        return userResponse;
+        return UserMapper.toResponse(user);
     }
 
     public List<UserResponse> getAllUsers(){
