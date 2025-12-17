@@ -10,6 +10,7 @@ public class RequisicaoMapper {
 
     public static RequisicaoResponse toResponse(RequisicaoEntity requisicaoEntity){
         return RequisicaoResponse.builder()
+                .id(requisicaoEntity.getId())
                 .itemPedido(requisicaoEntity.getItemPedido())
                 .dataRequisicao(requisicaoEntity.getDataRequisicao())
                 .statusPedido(requisicaoEntity.getStatusPedido())
@@ -21,25 +22,6 @@ public class RequisicaoMapper {
         return requisicoes.stream()
                 .map(RequisicaoMapper::toResponse)
                 .toList();
-    }
-
-
-    public static RequisicaoEntity toEntity(RequisicaoRequest requisicaoRequest){
-        return RequisicaoEntity.builder()
-                .itemPedido(requisicaoRequest.getItemPedido())
-                .dataRequisicao(requisicaoRequest.getDataRequisicao())
-                .statusPedido(requisicaoRequest.getStatusPedido())
-                .solicitante(requisicaoRequest.getSolicitante())
-                .build();
-    }
-
-    public static RequisicaoRequest toRequest(RequisicaoEntity requisicaoEntity){
-        return RequisicaoRequest.builder()
-                .dataRequisicao(requisicaoEntity.getDataRequisicao())
-                .itemPedido(requisicaoEntity.getItemPedido())
-                .statusPedido(requisicaoEntity.getStatusPedido())
-                .solicitante(requisicaoEntity.getSolicitante())
-                .build();
     }
 
 }

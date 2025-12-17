@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webforge.row_manage_api.dto.material.MaterialRequest;
 import webforge.row_manage_api.dto.material.MaterialResponse;
+import webforge.row_manage_api.enums.Categoria;
 import webforge.row_manage_api.exception.BadRequestException;
 import webforge.row_manage_api.exception.ObjectNotFoundException;
 import webforge.row_manage_api.mapper.MaterialMapper;
+import webforge.row_manage_api.model.MaterialEntity;
 import webforge.row_manage_api.repository.MaterialRepository;
 
 import java.util.List;
@@ -24,6 +26,9 @@ public class EstoqueService {
             throw new ObjectNotFoundException("Não há materiais no estoque");
         }
         return MaterialMapper.toResponses(materiais);
+    }
+    public List<MaterialEntity> buscarPorCategoria(Categoria categoria){
+        return materialRepository.findByCategoria(categoria);
     }
 
     public void adicionarMaterial(Long id, int quantidade) {

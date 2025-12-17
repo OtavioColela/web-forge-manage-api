@@ -2,6 +2,7 @@ package webforge.row_manage_api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import webforge.row_manage_api.dto.ItemPedido.ItemPedidoRequest;
 import webforge.row_manage_api.dto.requisicao.RequisicaoRequest;
 import webforge.row_manage_api.dto.requisicao.RequisicaoResponse;
 import webforge.row_manage_api.enums.StatusPedido;
@@ -9,11 +10,13 @@ import webforge.row_manage_api.exception.BadRequestException;
 import webforge.row_manage_api.exception.ObjectNotFoundException;
 import webforge.row_manage_api.mapper.RequisicaoMapper;
 import webforge.row_manage_api.model.ItemPedido;
+import webforge.row_manage_api.model.MaterialEntity;
 import webforge.row_manage_api.model.RequisicaoEntity;
 import webforge.row_manage_api.repository.MaterialRepository;
 import webforge.row_manage_api.repository.RequisicaoRepository;
 import webforge.row_manage_api.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.time.LocalDateTime.now;
@@ -27,19 +30,24 @@ public class RequisicaoService {
     private MaterialRepository materialRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private EstoqueService estoqueService;
+//    @Autowired
+//    private NotificationClient notificationClient;
 
     public RequisicaoResponse criarRequisicao(RequisicaoRequest requisicaoRequest) {
 
-        var solicitante = userRepository.findById(requisicaoRequest.getSolicitante().getId())
+        var solicitante = userRepository.findById(requisicaoRequest.getSolicitanteId())
                 .orElseThrow(() -> new RuntimeException("Solicitante não encontrado"));
 
-        var requisicao = new RequisicaoEntity(requisicaoRequest.getStatusPedido(), requisicaoRequest.getDataRequisicao(), requisicaoRequest.getItemPedido());
-
-        requisicao.setDataRequisicao(now());
-        requisicao.setSolicitante(solicitante);
+        var requisicao = RequisicaoEntity.builder()
+                        .statusPedido(StatusPedido.PENDENTE)
+                                .dataRequisicao(LocalDateTime.now())
+                                        .solicitante(solicitante)
+                                                .build();
 
         List<ItemPedido> itens = requisicaoRequest.getItemPedido().stream().map(itemRequest -> {
-            var material = materialRepository.findById(itemRequest.getMaterialEntity().getId())
+            var material = materialRepository.findById(itemRequest.getMaterialId())
                     .orElseThrow(() -> new RuntimeException("Material não encontrado"));
 
             validarEstoque(material, itemRequest.getQuantidade());
@@ -53,6 +61,8 @@ public class RequisicaoService {
 
         requisicao.setItemPedido(itens);
         requisicaoRepository.save(requisicao);
+//        var message = "Uma nova requisição foi criada pela escola" + solicitante.getSchool();
+//        notificationClient.sendNotification(message, solicitante.getEmail(), "estoque@smesb.com.br");
         return RequisicaoMapper.toResponse(requisicao);
     }
 
@@ -68,6 +78,13 @@ public class RequisicaoService {
         var requisicao = requisicaoRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Requisição não encontrada"));
         requisicao.setStatusPedido(statusPedido);
+//        var message = "Sua requisição foi definida como" + statusPedido;
+//        notificationClient.sendNotification(message, "estoque@smesb.com.br", requisicao.getSolicitante().getEmail());
+        if(statusPedido.equals(StatusPedido.APROVADO)){
+            for (ItemPedido item : requisicao.getItemPedido()) {
+                estoqueService.reduzirMaterial(item.getMaterialEntity().getId(), item.getQuantidade());
+            }
+        }
         requisicaoRepository.save(requisicao);
     }
 
@@ -77,6 +94,10 @@ public class RequisicaoService {
             throw new ObjectNotFoundException("Este usuário nunca fez uma requisição");
         }
         return RequisicaoMapper.toResponse(requisicoes);
+    }
+
+    public List<RequisicaoResponse> getAllRequisitionsByStatus(StatusPedido statusPedido){
+        return RequisicaoMapper.toResponse(requisicaoRepository.findByStatusPedidoOrderByDataRequisicaoDesc(statusPedido));
     }
 
 }

@@ -25,12 +25,16 @@ public class RequisicaoController {
         return ResponseEntity.ok(requisicaoService.listarRequisicoes());
     }
     @PutMapping("/status/{id}")
-    public ResponseEntity<Void> definirStatusRequisicao(Long id, StatusPedido statusPedido){
+    public ResponseEntity<Void> definirStatusRequisicao(@PathVariable Long id, StatusPedido statusPedido){
         requisicaoService.definirRequisicao(id, statusPedido);
         return ResponseEntity.ok().build();
     }
     @GetMapping("/abertas/{Id}")
-    public ResponseEntity<List<RequisicaoResponse>> mostrarHistoricoUsuario(Long id){
+    public ResponseEntity<List<RequisicaoResponse>> mostrarHistoricoUsuario(@PathVariable Long id){
         return ResponseEntity.ok(requisicaoService.getAllRequisitionsByUser(id));
+    }
+    @GetMapping("/pendentes")
+    public ResponseEntity<List<RequisicaoResponse>> mostrarTodasPendentes(StatusPedido statusPedido){
+        return ResponseEntity.ok(requisicaoService.getAllRequisitionsByStatus(statusPedido));
     }
 }

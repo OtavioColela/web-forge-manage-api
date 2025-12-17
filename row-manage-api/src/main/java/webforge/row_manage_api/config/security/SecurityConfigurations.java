@@ -37,12 +37,14 @@ public class    SecurityConfigurations {
             return httpSecurity.csrf(csrf -> csrf.disable())
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(authorize -> authorize
-                            .requestMatchers("/usuario").permitAll()
-                            .requestMatchers( "api/auth/login").permitAll()
-                            .requestMatchers("api/auth/**").permitAll()
-                            .requestMatchers("api/usuario/deletar/**").hasAnyAuthority("SUPER_USER","ADMIN")
-                            .requestMatchers("api/beneficio/listar").hasAnyRole("USER", "SUPER_USER", "ADMIN")
-                            .requestMatchers("error").permitAll()
+                            .requestMatchers("/usuario/**").permitAll()
+                            .requestMatchers("/estoque", "/estoque/**").permitAll()
+                            .requestMatchers("/requisicao/**").permitAll()
+                            .requestMatchers( "/api/auth/login").permitAll()
+                            .requestMatchers("/api/auth/**").permitAll()
+                            .requestMatchers("/api/usuario/deletar/**").hasAnyAuthority("SUPER_USER","ADMIN")
+                            .requestMatchers("/api/beneficio/listar").hasAnyRole("USER", "SUPER_USER", "ADMIN")
+                            .requestMatchers("/error").permitAll()
                             .requestMatchers(SWAGGER_WHITELIST).permitAll()
 
                             .anyRequest().authenticated()
@@ -62,4 +64,5 @@ public class    SecurityConfigurations {
         return new BCryptPasswordEncoder();
     }
 }
+
 

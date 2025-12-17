@@ -13,7 +13,8 @@ import webforge.row_manage_api.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static webforge.row_manage_api.validator.UserValidator.validateUser;
+import static webforge.row_manage_api.validator.UserValidator.validateFields;
+
 
 @Service
 @AllArgsConstructor
@@ -21,14 +22,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
-    public UserResponse createUser(UserRequest userRequest){
-        validateUser(userRequest);
-        var user = UserMapper.toEntity(userRequest);
-        var userResponse = UserMapper.toResponse(user);
-        userRepository.saveAndFlush(user);
-        return userResponse;
-    }
 
     public List<UserResponse> getAllUsers(){
         if(userRepository.findAll().isEmpty()){

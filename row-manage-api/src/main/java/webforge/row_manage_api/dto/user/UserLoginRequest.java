@@ -7,13 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequest {
-    private Long id;
-    private String name;
+public class UserLoginRequest {
     private String email;
-    private String school;
-    private String cpf;
-    private String role;
     private String password;
-
 }
