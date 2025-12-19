@@ -38,31 +38,30 @@ public class AuthService {
 
     public UserResponse createUser(UserRequest userRequest) {
 
-        var userEntity = UserMapper.toEntity(userRequest);
+        var user = UserMapper.toEntity(userRequest);
 
-        validateFields(userEntity);
+        validateFields(user);
 
-        if (userRepository.findByEmail(userRequest.getEmail()) != null) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new BadRequestException("Já existe um usuario cadastrado com este email");
         }
 
-        var encryptedPassword = passwordEncoder.encode(userEntity.getPassword());
-
-        var user = new UserEntity(
-                userEntity.getName(),
-                userEntity.getCpf(),
-                userEntity.getEmail(),
-                userEntity.getSchool(),
-                encryptedPassword,
-                userEntity.getRole()
-        );
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return UserMapper.toResponse(userRepository.save(user));
     }
 
     public String loginUser(UserLoginRequest user) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        var dbUser = userRepository.findByEmail(user.getEmail());
+        System.out.println("SENHA NO BANCO: " + dbUser.getPassword());
+        System.out.println("EMAIL: " + user.getEmail());
+        System.out.println("SENHA: " + user.getPassword());
+        var auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        user.getEmail(),
+                        user.getPassword()
+                )
+        );
 
         return tokenService.generateToken((UserEntity) auth.getPrincipal());
 

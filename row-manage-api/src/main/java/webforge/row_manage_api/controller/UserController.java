@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping("/mostrar")
     public ResponseEntity<List<UserResponse>> getAllUsers(){
-        return ResponseEntity.status(FOUND).body(userService.getAllUsers());
+        return ResponseEntity.status(OK).body(userService.getAllUsers());
     }
 
     @PutMapping("/{id}")

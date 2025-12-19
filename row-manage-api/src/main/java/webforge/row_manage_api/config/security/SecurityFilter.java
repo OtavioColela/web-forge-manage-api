@@ -27,19 +27,27 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
-        return path.startsWith("/api/auth");
+        String path = request.getRequestURI();
+        return path.startsWith("/api/auth")
+                || path.startsWith("/error")
+                || path.startsWith("/swagger");
     }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
 
-        var token = this.recoverToken(request);
+
+
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String token = recoverToken(request);
 
         if (token != null) {
             try {
-                var login = tokenService.validateToken(token);  // pode lançar exceção
+                String login = tokenService.validateToken(token);
                 var user = userRepository.findByEmail(login);
 
                 if (user != null) {
@@ -48,11 +56,12 @@ public class SecurityFilter extends OncePerRequestFilter {
                             null,
                             user.getAuthorities()
                     );
+
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
 
             } catch (Exception e) {
-
+                SecurityContextHolder.clearContext();
             }
         }
 
