@@ -53,7 +53,9 @@ public class    SecurityConfigurations {
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/error",
-                                "/usuario/**"
+                                "/usuario/**",
+                                "/requisicao/**",
+                                "/estoque/**"
                         ).permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .anyRequest().authenticated()

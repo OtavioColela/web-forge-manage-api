@@ -37,4 +37,8 @@ public class RequisicaoController {
     public ResponseEntity<List<RequisicaoResponse>> mostrarTodasPendentes(StatusPedido statusPedido){
         return ResponseEntity.ok(requisicaoService.getAllRequisitionsByStatus(statusPedido));
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<RequisicaoResponse> mostrarRequisicaoPorId(@PathVariable Long id){
+        return ResponseEntity.ok(requisicaoService.mostrarPorId(id));
+    }
 }

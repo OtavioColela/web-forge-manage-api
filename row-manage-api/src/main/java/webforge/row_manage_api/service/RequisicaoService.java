@@ -99,5 +99,12 @@ public class RequisicaoService {
     public List<RequisicaoResponse> getAllRequisitionsByStatus(StatusPedido statusPedido){
         return RequisicaoMapper.toResponse(requisicaoRepository.findByStatusPedidoOrderByDataRequisicaoDesc(statusPedido));
     }
+    public RequisicaoResponse mostrarPorId(Long id){
+        var req = requisicaoRepository.findById(id);
+        if(req.isEmpty()){
+            throw new BadRequestException("Requisição não encontrada");
+        }
+        return RequisicaoMapper.toResponse(req.get());
+    }
 
 }
