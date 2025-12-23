@@ -16,12 +16,14 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class RequisicaoResponse {
+    private Long id;
     private List<ItemPedido> itemPedido;
     private LocalDateTime dataRequisicao;
     private StatusPedido statusPedido;
     private UserResponse solicitante;
 
-    public RequisicaoResponse(StatusPedido statusPedido, LocalDateTime dataRequisicao, UserResponse solicitante) {
+    public RequisicaoResponse(Long id, StatusPedido statusPedido, LocalDateTime dataRequisicao, UserResponse solicitante) {
+        this.id = id;
         this.statusPedido = statusPedido;
         this.dataRequisicao = dataRequisicao;
         this.solicitante = solicitante;

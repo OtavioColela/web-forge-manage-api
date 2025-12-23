@@ -21,14 +21,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest){
-        return ResponseEntity.status(CREATED).body(userService.createUser(userRequest));
-    }
-
     @GetMapping("/mostrar")
     public ResponseEntity<List<UserResponse>> getAllUsers(){
-        return ResponseEntity.status(FOUND).body(userService.getAllUsers());
+        return ResponseEntity.status(OK).body(userService.getAllUsers());
     }
 
     @PutMapping("/{id}")

@@ -1,5 +1,6 @@
 package webforge.row_manage_api.config.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,24 +33,36 @@ public class    SecurityConfigurations {
 
 
 
-        @Bean
-            public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-            return httpSecurity.csrf(csrf -> csrf.disable())
-                    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .authorizeHttpRequests(authorize -> authorize
-                            .requestMatchers("/usuario").permitAll()
-                            .requestMatchers( "api/auth/login").permitAll()
-                            .requestMatchers("api/auth/**").permitAll()
-                            .requestMatchers("api/usuario/deletar/**").hasAnyAuthority("SUPER_USER","ADMIN")
-                            .requestMatchers("api/beneficio/listar").hasAnyRole("USER", "SUPER_USER", "ADMIN")
-                            .requestMatchers("error").permitAll()
-                            .requestMatchers(SWAGGER_WHITELIST).permitAll()
-
-                            .anyRequest().authenticated()
-                    )
-                    .addFilterAfter(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                    .build();
-        }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write(
+                                    "{\"error\": \"Nao autorizado\"}"
+                            );
+                        })
+                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/error",
+                                "/usuario/**",
+                                "/requisicao/**",
+                                "/estoque/**"
+                        ).permitAll()
+                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -62,4 +75,5 @@ public class    SecurityConfigurations {
         return new BCryptPasswordEncoder();
     }
 }
+
 
