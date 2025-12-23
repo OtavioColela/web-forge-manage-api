@@ -3,22 +3,23 @@ name: Java CI with Maven
 on:
   push:
     branches:
-      - "main"
-      - "develop"
+      - main
+      - develop
   pull_request:
     branches:
-      - "main"
-      - "develop"
+      - main
+      - develop
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # Checkout do código
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Configuração do JDK
+      # Configuração do JDK 21
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -26,10 +27,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Executando o build com Maven
+      # Build do projeto com Maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      # Rodando os testes unitários com Maven
-      - name: Run Tests with Maven
+      # Executar testes unitários
+      - name: Run Tests
         run: mvn test
