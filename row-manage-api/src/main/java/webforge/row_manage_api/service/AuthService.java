@@ -2,6 +2,7 @@ package webforge.row_manage_api.service;
 
 
 
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import webforge.row_manage_api.dto.user.UserLoginRequest;
 import webforge.row_manage_api.dto.user.UserRequest;
 import webforge.row_manage_api.dto.user.UserResponse;
 import webforge.row_manage_api.exception.BadRequestException;
+import webforge.row_manage_api.exception.ObjectNotFoundException;
 import webforge.row_manage_api.mapper.UserMapper;
 import webforge.row_manage_api.model.UserEntity;
 import webforge.row_manage_api.repository.UserRepository;
@@ -53,9 +55,9 @@ public class AuthService {
 
     public String loginUser(UserLoginRequest user) {
         var dbUser = userRepository.findByEmail(user.getEmail());
-        System.out.println("SENHA NO BANCO: " + dbUser.getPassword());
-        System.out.println("EMAIL: " + user.getEmail());
-        System.out.println("SENHA: " + user.getPassword());
+        if(dbUser == null){
+            throw new ObjectNotFoundException("Usuario ou senha incorretos");
+        }
         var auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getEmail(),
