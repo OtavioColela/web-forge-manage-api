@@ -2,13 +2,13 @@ package webforge.row_manage_api.service;
 
 
 
-import javassist.NotFoundException;
-import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import webforge.row_manage_api.config.security.TokenService;
 import webforge.row_manage_api.dto.user.UserLoginRequest;
 import webforge.row_manage_api.dto.user.UserRequest;
@@ -68,4 +68,18 @@ public class AuthService {
         return tokenService.generateToken((UserEntity) auth.getPrincipal());
 
     }
+
+    public UserResponse getEu(Authentication authentication) {
+
+        UserEntity user = (UserEntity) authentication.getPrincipal();
+
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getSchool(),
+                user.getRole()
+        );
+    }
+
 }

@@ -57,11 +57,14 @@ public class    SecurityConfigurations {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                "/api/auth/**",
                                 "/error",
                                 "/usuario/**",
                                 "/requisicao/**",
                                 "/estoque/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/api/auth/login",
+                                "/api/auth/register"
                         ).permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .anyRequest().authenticated()

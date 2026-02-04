@@ -64,13 +64,25 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(role.equals("SUPER_USER")){
-            return List.of(new SimpleGrantedAuthority("ADMIN") , new SimpleGrantedAuthority("USER"),  new SimpleGrantedAuthority("SUPER_USER"));
-        } else if (role.equals("ADMIN")) {
-            return List.of(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"));
-        }else{
-            return Collections.singletonList(new SimpleGrantedAuthority("USER"));
+
+        if ("SUPER_USER".equals(role)) {
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_SUPER_USER"),
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
         }
+
+        if ("ADMIN".equals(role)) {
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
+        }
+
+        return List.of(
+                new SimpleGrantedAuthority("ROLE_USER")
+        );
     }
 
     @Override

@@ -28,10 +28,13 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.startsWith("/api/auth")
-                || path.startsWith("/error")
-                || path.startsWith("/swagger");
+
+        return path.equals("/api/auth/login")
+                || path.equals("/api/auth/register")
+                || path.startsWith("/swagger")
+                || path.startsWith("/error");
     }
+
 
 
 
@@ -43,12 +46,16 @@ public class SecurityFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+
+
         String token = recoverToken(request);
+
 
         if (token != null) {
             try {
                 String login = tokenService.validateToken(token);
                 var user = userRepository.findByEmail(login);
+
 
                 if (user != null) {
                     var authentication = new UsernamePasswordAuthenticationToken(
@@ -66,6 +73,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+
+
     }
 
     private String recoverToken(HttpServletRequest request) {

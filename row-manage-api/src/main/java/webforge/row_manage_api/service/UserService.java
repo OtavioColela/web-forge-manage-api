@@ -28,7 +28,7 @@ public class UserService {
             throw new BadRequestException("Não há usuários no repositorio");
         }
         return userRepository.findAll().stream().map(userEntity -> new UserResponse(userEntity.getId(), userEntity.getName(),
-                userEntity.getSchool(), userEntity.getEmail())).collect(Collectors.toList());
+                userEntity.getSchool(), userEntity.getEmail(), userEntity.getRole())).collect(Collectors.toList());
 
     }
     public UserResponse updateUser(Long id, UserRequest userRequest){
