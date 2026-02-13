@@ -76,8 +76,8 @@ public class AuthService {
         return new UserResponse(
                 user.getId(),
                 user.getName(),
-                user.getEmail(),
                 user.getSchool(),
+                user.getEmail(),
                 user.getRole()
         );
     }
