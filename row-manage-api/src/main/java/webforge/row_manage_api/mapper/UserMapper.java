@@ -22,7 +22,9 @@ public class UserMapper {
                 .id(userEntity.getId())
                 .name(userEntity.getName())
                 .email(userEntity.getEmail())
-                .school(userEntity.getSchool()).build();
+                .school(userEntity.getSchool())
+                .role(userEntity.getRole()).build();
+
     }
 
 }
