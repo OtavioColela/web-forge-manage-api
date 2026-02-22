@@ -19,37 +19,39 @@ public class UserValidator {
 
     public static void validateName(String name) {
         if (isEmpty(name)) {
-            validateRequiredField(name, "Name");
+            validateRequiredField(name, "Nome");
         }
 
         if (!name.matches("^[a-zA-Z\\s]+$")) {
-            throw new BadRequestException("Name should only contain letters and spaces.");
+            throw new BadRequestException("O nome deve conter apenas letras e espaços.");
         }
     }
 
     public static void validateEmail(String email) {
         if (isEmpty(email)) {
-            validateRequiredField(email, "Email");
+            validateRequiredField(email, "E-mail");
         }
 
         var emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         if (!matches(emailRegex, email)) {
-            throw new BadRequestException("Invalid email format.");
+            throw new BadRequestException("Formato de e-mail inválido.");
         }
 
         if (!email.endsWith("@gmail.com")) {
-            throw new BadRequestException("Unrecognized Gmail Account Access Attempt");
+            throw new BadRequestException("Apenas contas do Gmail são permitidas.");
         }
     }
 
     public static void validatePassword(String password) {
         if (isEmpty(password)) {
-            validateRequiredField(password, "Password");
+            validateRequiredField(password, "Senha");
         }
 
         var passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$";
         if (!matches(passwordRegex, password)) {
-            throw new BadRequestException("Password must be at least 8 characters long, contain at least one letter, one number, and one special character.");
+            throw new BadRequestException(
+                    "A senha deve ter no mínimo 8 caracteres e conter pelo menos uma letra, um número e um caractere especial."
+            );
         }
     }
 

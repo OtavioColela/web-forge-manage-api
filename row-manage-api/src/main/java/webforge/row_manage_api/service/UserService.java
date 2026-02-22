@@ -13,7 +13,6 @@ import webforge.row_manage_api.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static webforge.row_manage_api.validator.UserValidator.validateFields;
 
 
 @Service
