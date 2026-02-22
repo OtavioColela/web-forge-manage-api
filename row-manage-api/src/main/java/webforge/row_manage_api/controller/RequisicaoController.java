@@ -10,6 +10,8 @@ import webforge.row_manage_api.service.RequisicaoService;
 
 import java.util.List;
 
+import static javax.security.auth.callback.ConfirmationCallback.OK;
+
 
 @RestController
 @RequestMapping("/requisicao")
@@ -32,6 +34,10 @@ public class RequisicaoController {
     @GetMapping("/abertas/{Id}")
     public ResponseEntity<List<RequisicaoResponse>> mostrarHistoricoUsuario(@PathVariable Long id){
         return ResponseEntity.ok(requisicaoService.getAllRequisitionsByUser(id));
+    }
+    @GetMapping("/historico")
+    public ResponseEntity<List<RequisicaoResponse>> mostrarHistorico() {
+        return ResponseEntity.ok(requisicaoService.mostrarHistorico());
     }
     @GetMapping("/pendentes")
     public ResponseEntity<List<RequisicaoResponse>> mostrarTodasPendentes(StatusPedido statusPedido){

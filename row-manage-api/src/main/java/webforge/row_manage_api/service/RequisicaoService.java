@@ -66,6 +66,11 @@ public class RequisicaoService {
         return RequisicaoMapper.toResponse(requisicao);
     }
 
+    public List<RequisicaoResponse> mostrarHistorico(){
+        var requisicoes = requisicaoRepository.buscarPorStatus(List.of(StatusPedido.APROVADO, StatusPedido.REJEITADO));
+        return RequisicaoMapper.toResponse(requisicoes);
+    }
+
     public List<RequisicaoResponse> listarRequisicoes(){
         var requisicoes = requisicaoRepository.findAll();
         if(requisicoes.isEmpty()){
