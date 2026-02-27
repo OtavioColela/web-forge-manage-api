@@ -31,17 +31,23 @@ public class EstoqueService {
         return materialRepository.findByCategoria(categoria);
     }
 
-    public void adicionarMaterial(Long id, int quantidade) {
-        var material = materialRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Material não encontrado"));
-        material.setQuantidade(material.getQuantidade() + quantidade);
-        materialRepository.save(material);
-    }
 
     public MaterialResponse criarMaterial(MaterialRequest materialRequest){
         var material = MaterialMapper.toEntity(materialRequest);
         materialRepository.save(material);
         return MaterialMapper.toResponse(material);
+    }
+
+    public MaterialResponse atualizarMaterial(Long id, MaterialRequest materialRequest){
+        var material = materialRepository.findById(id);
+        if(material.isEmpty()){
+            throw new ObjectNotFoundException("Material inexistente");
+        }
+        material.get().setCategoria(materialRequest.getCategoria());
+        material.get().setQuantidade(materialRequest.getQuantidade());
+        material.get().setNome(materialRequest.getNome());
+
+        return MaterialMapper.toResponse(materialRepository.save(material.get()));
     }
 
     public void reduzirMaterial(Long id, int quantidade) {
@@ -52,6 +58,8 @@ public class EstoqueService {
         material.setQuantidade(material.getQuantidade() - quantidade);
         materialRepository.save(material);
     }
+
+
 
 
 }

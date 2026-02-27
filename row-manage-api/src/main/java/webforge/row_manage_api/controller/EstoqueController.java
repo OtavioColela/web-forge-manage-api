@@ -33,16 +33,10 @@ public class EstoqueController {
         return ResponseEntity.status(CREATED).body(estoqueService.criarMaterial(materialRequest));
     }
 
-    @PostMapping("/adicionar")
-    public ResponseEntity<Void> adicionarMaterial(@RequestParam Long id, @RequestParam int quantidade){
-        estoqueService.adicionarMaterial(id, quantidade);
-        return ResponseEntity.ok().build();
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<MaterialResponse> editarMaterial(@PathVariable Long id , @RequestBody MaterialRequest materialRequest){
+        return ResponseEntity.ok().body(estoqueService.atualizarMaterial(id, materialRequest));
     }
 
-    @PostMapping("/reduzir")
-    public ResponseEntity<Void> reduzirMaterial(@RequestParam Long id,
-                                                @RequestParam int quantidade) {
-        estoqueService.reduzirMaterial(id, quantidade);
-        return ResponseEntity.ok().build();
-    }
+
 }
