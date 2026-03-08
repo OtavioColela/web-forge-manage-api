@@ -31,7 +31,7 @@ public class RequisicaoController {
         requisicaoService.definirRequisicao(id, statusPedido);
         return ResponseEntity.ok().build();
     }
-    @GetMapping("/abertas/{Id}")
+    @GetMapping("/abertas/{id}")
     public ResponseEntity<List<RequisicaoResponse>> mostrarHistoricoUsuario(@PathVariable Long id){
         return ResponseEntity.ok(requisicaoService.getAllRequisitionsByUser(id));
     }
