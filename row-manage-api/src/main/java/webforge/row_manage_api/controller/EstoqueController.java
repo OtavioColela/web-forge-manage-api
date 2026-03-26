@@ -11,7 +11,10 @@ import webforge.row_manage_api.service.EstoqueService;
 
 import java.util.List;
 
+
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @RequestMapping("/estoque")
 public class EstoqueController {
@@ -29,13 +32,19 @@ public class EstoqueController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<MaterialResponse> criarMaterial(MaterialRequest materialRequest){
+    public ResponseEntity<MaterialResponse> criarMaterial(@RequestBody MaterialRequest materialRequest){
         return ResponseEntity.status(CREATED).body(estoqueService.criarMaterial(materialRequest));
     }
 
     @PutMapping("/atualizar/{id}")
     public ResponseEntity<MaterialResponse> editarMaterial(@PathVariable Long id , @RequestBody MaterialRequest materialRequest){
         return ResponseEntity.ok().body(estoqueService.atualizarMaterial(id, materialRequest));
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<Void> deletarMaterial(@PathVariable Long id){
+        estoqueService.deletarMaterial(id);
+        return ResponseEntity.noContent().build();
     }
 
 

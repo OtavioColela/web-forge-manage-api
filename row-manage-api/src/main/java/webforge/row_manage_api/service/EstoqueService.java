@@ -59,6 +59,15 @@ public class EstoqueService {
         materialRepository.save(material);
     }
 
+    public void deletarMaterial(Long id){
+         var material = materialRepository.findById(id);
+         if(material.isEmpty()){
+             throw new ObjectNotFoundException("Material não encontrado");
+         }
+
+         materialRepository.deleteById(id);
+    }
+
 
 
 
