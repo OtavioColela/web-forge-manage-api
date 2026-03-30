@@ -46,6 +46,10 @@ public class EstoqueController {
         estoqueService.deletarMaterial(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/esgotado")
+    public ResponseEntity<List<MaterialResponse>> mostrarMateriaisSemEstoque(){
+        return ResponseEntity.status(OK).body(estoqueService.mostrarMaterialSemEstoque());
+    }
 
 
 }

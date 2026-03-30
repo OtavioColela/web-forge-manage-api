@@ -68,6 +68,14 @@ public class EstoqueService {
          materialRepository.deleteById(id);
     }
 
+    public List<MaterialResponse> mostrarMaterialSemEstoque(){
+        var materiais = materialRepository.findMateriaisSemEstoque();
+        if(materiais.isEmpty()){
+            throw new BadRequestException("Não há materiais sem estoque! Tudo OK");
+        }
+        return MaterialMapper.toResponses(materiais);
+    }
+
 
 
 
