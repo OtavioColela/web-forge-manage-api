@@ -18,13 +18,6 @@ Backend
 - POSTGRES
 - Maven
 
-Frontend
-
-- Angular
-- TypeScript
-- CoreUI
-- Bootstrap
-
 ## Funcionalidades
 
 - Login com autenticação JWT
