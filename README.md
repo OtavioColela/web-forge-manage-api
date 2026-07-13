@@ -46,4 +46,5 @@ Frontend
 
 ## Autor
 
-Otávio Borges
+Back End - Otávio C. Borges
+Front End - Roger Aguiar
