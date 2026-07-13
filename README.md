@@ -39,5 +39,5 @@ Backend
 
 ## Autor
 
-Back End - Otávio C. Borges
-Front End - Roger Aguiar
+- Back End - Otávio C. Borges
+- Front End - Roger Aguiar
